@@ -6,7 +6,7 @@ from airflow.utils.dates import days_ago
 import requests
 import json
 
-#lati and longi for London
+#Taking these coordinates for testing purpose.
 LATITUDE = '51.5074'
 LONGITUDE = '-0.1278'
 POSTGRES_CONN_ID = 'postgres_fault'
@@ -76,9 +76,9 @@ with DAG(dag_id='weather_etl_pipeline',
                        );
         """)
 
-        """Insert data"""
+        """Insert data into table"""
         cursor.execute("""
-        INSERT INTO weather_data (latitude,longitude,temperature,windspeed,winddirection,weathercode)
+        INSERT INTO weather_data (latitude, longitude, temperature, windspeed, winddirection, weathercode)
         VALUES(%s,%s,%s,%s,%s,%s)
         """,(
             transformed_data['latitude'],
@@ -92,7 +92,7 @@ with DAG(dag_id='weather_etl_pipeline',
         conn.commit()
         cursor.close()
 
-    #DAG WORKFLOW - ETL Pipeline
+    #DAG WORKFLOW - ETL Pipeline (on how the code should run)
     weather_data=extract_weather_data()
     transformed_data=tranform_weather_data(weather_data)
     load_weather_data(transformed_data)
